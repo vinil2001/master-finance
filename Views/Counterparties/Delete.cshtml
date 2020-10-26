@@ -1,0 +1,83 @@
+﻿@model Finance.klt
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Удаление</h2>
+
+<h3>Вы уверенны что хотите удалить @Model.name ?</h3>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+<div>
+    <hr />
+    <table class="table">
+        <tr>
+            <td><p>Название</p></td>
+            <td><p>@Html.DisplayFor(model => model.name)</p></td>
+        </tr>
+        <tr>
+            <td><p>Название полностью</p></td>
+            <td><p>@Html.DisplayFor(model => model.full)</p></td>
+        </tr>
+        <tr>
+            <td><p>Плательщик НДС</p></td>
+            <td><p>@Html.DisplayFor(model => model.nds)</p></td>
+        </tr>
+        <tr>
+            <td><p>ИНН</p></td>
+            <td><p>@Html.DisplayFor(model => model.knds)</p></td>
+        </tr>
+        <tr>
+            <td><p>Номер свидетельсва плательщика НДС</p></td>
+            <td><p>@Html.DisplayFor(model => model.snds)</p></td>
+        </tr>
+        <tr>
+            <td><p>Банк</p></td>
+            <td><p>@Html.DisplayFor(model => model.bank)</p></td>
+        </tr>
+        <tr>
+            <td><p>Номер счета</p></td>
+            <td><p>@Html.DisplayFor(model => model.chet)</p></td>
+        </tr>
+        <tr>
+            <td><p>МФО</p></td>
+            <td><p>@Html.DisplayFor(model => model.mfob)</p></td>
+        </tr>
+        <tr>
+            <td><p>ЄДРПОУ</p></td>
+            <td><p>@Html.DisplayFor(model => model.okpo)</p></td>
+        </tr>
+        <tr>
+            <td><p>Юр.Адрес</p></td>
+            <td><p>@Html.DisplayFor(model => model.adur)</p></td>
+        </tr>
+        <tr>
+            <td><p>Физ.Адрес</p></td>
+            <td><p>@Html.DisplayFor(model => model.adft)</p></td>
+        </tr>
+        <tr>
+            <td><p>Номер тел.</p></td>
+            <td><p>@Html.DisplayFor(model => model.telf)</p></td>
+        </tr>
+        <tr>
+            <td><p>Контактное лицо</p></td>
+            <td><p>@Html.DisplayFor(model => model.cont)</p></td>
+        </tr>
+        <tr>
+            <td><p>Комментарий</p></td>
+            <td><p>@Html.DisplayFor(model => model.comt)</p></td>
+        </tr>
+        <tr>
+            <td><p>Скидка %</p></td>
+            <td><p>@Html.DisplayFor(model => model.per)</p></td>
+        </tr>
+    </table>
+    <a href='@Url.Action("AddToArchive", new { id = Model.id})'>
+        <img src="~/pictures/icons8-delete-2.png" alt="Удалить" title="Удалить" />
+    </a>
+</div>
+
+}

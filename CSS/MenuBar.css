@@ -1,0 +1,111 @@
+﻿:root {
+    /*--main-menue-color: rgba(0, 0, 0, 0.08);*/
+    --main-menue-color: #C8C8FB;
+    --main-menue-border-radius: 10px;
+    --main-menue-border: 1px solid #a2a2a2;
+}
+
+.menueBar {
+    position: inherit;
+    border: var(--main-menue-border);
+    background-color: var(--main-menue-color);
+    border-radius: var(--main-menue-border-radius);
+    line-height: 1;
+    font-family: 'Montserrat', sans-serif;
+    display: flex;
+    min-width: 720px;
+
+    box-shadow: 5px -5px 6px #FFA500;
+    /*flex-wrap: wrap;*/
+    z-index: 100;
+}
+
+.dropDownContent {
+    display: none;
+    position: absolute;
+    background-color: var(--main-menue-color);
+    min-width: 100px;
+    /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+    margin-top: 20px;
+    border: var(--main-menue-border);
+    border-top: none;
+    border-radius: var(--main-menue-border-radius);
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-top: 4px solid orange;
+    left: 183px;
+    z-index: 100;
+}
+.dropDownContent a {
+     color: black;
+     padding: 12px 16px;
+     text-decoration: none;
+     display: block;
+}
+
+.menueBar a {
+    text-decoration: none;
+    /*color: white;*/
+    color: #34495e;
+    font-size: .99em;
+    margin: 20px;
+}
+
+.sub-list-content {
+    display: none;
+    position: absolute;
+    border-radius: var(--main-menue-border-radius);
+    border: var(--main-menue-border);
+}
+
+.dropDown li {
+    cursor: pointer;
+    list-style-type: none;
+}
+
+.menueBar a:hover {
+    color: #718daa;
+}
+
+.dropDown:hover .dropDownContent {
+    display: block;
+}
+
+.sub-list {
+    display: none;
+    position: absolute;
+    background-color: var(--main-menue-color);
+    min-width: 230px;
+    /*box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);*/
+    z-index: 100;
+    left: 100%;
+    top: -4px;
+    width: 165px;
+    border-bottom-right-radius: var(--main-menue-border-radius);
+    border-top-right-radius: var(--main-menue-border-radius);
+    border: var(--main-menue-border);
+    border-top: 4px solid orange;
+}
+
+.sub-dropdown-content:hover .sub-list {
+    display: block;
+}
+
+.menueHeader {
+    padding: 20px;
+    color: white;
+}
+
+.exit {
+    margin-left: auto;
+    padding-left: 0;
+}
+
+.menueBar a {
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.isActive {
+    text-shadow: 6px #FFA500;
+}

@@ -1,0 +1,280 @@
+﻿@model Finance.Models.PaymentStatement
+@using Finance.Models
+
+
+<link href="~/CSS/Checkbox.css" rel="stylesheet" />
+<link href="~/CSS/create_edit_form.css" rel="stylesheet" />
+<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+@*<link rel="stylesheet" type="text/css" href="button.css">*@
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/selectFile.js"></script>
+<script src="~/Scripts/jquery.inputmask.bundle.js"></script>
+<script src="~/Scripts/CreateEditePayment.js"></script>
+
+<div id="MenuBar">
+    @Html.Partial("MenuBar", "PaymentStatements")
+</div>
+
+<br />
+
+<div class="editCreateUserInfo" @*style="padding-bottom:15px;"*@>
+    <div @*style="float:left; display:inline;"*@>
+        <h3>Новый платеж</h3>
+    </div>
+    <div @*style="float:right; display:inline;"*@>
+        <h5>Вы вошли под логином: @User.Identity.Name</h5>
+    </div>
+</div>
+<br />
+<br />
+<form class="mainTable" action="/PaymentStatements/Edit" enctype="multipart/form-data" id="CreatePaymentStatementForm" method="post">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @*Имя компании start*@
+    <div class="item item1">
+        @Html.LabelFor(model => model.Counterparty.name, "Компания", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item2">
+        @Html.HiddenFor(model => model.KltId)
+        @Html.HiddenFor(model => model.Id)
+        @Html.EditorFor(model => model.Counterparty.name, new { htmlAttributes = new { @class = "" } })
+        @Html.ValidationMessageFor(model => model.KltId, "", new { @class = "text-danger" })
+    </div>
+    <div class="item item3">
+        <a href="#" style="text-decoration: none" onclick='showModalWindow("/Counterparties/Create")'>
+            <img lenght="80" width="62" src="~/pictures/addNewItem.png" title="Добавить компанию" alt="Добавить компанию">
+        </a>
+    </div>
+    @*Имя компании end*@
+    @*№ счета start*@
+    <div class="item item4">
+        @Html.LabelFor(model => model.InvoiceNumber, "№ счета", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item5">
+        @Html.EditorFor(model => model.InvoiceNumber, new { htmlAttributes = new { @class = "" } })
+        @Html.ValidationMessageFor(model => model.InvoiceNumber, "", new { @class = "text-danger" })
+    </div>
+    @*№ счета end*@
+    @*Дата счета start*@
+    <div class="item item6">
+        @Html.LabelFor(model => model.InvoiceDate, "Дата счета", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item7">
+        @Html.EditorFor(model => model.InvoiceDate, new { htmlAttributes = new { @class = "" } })
+        @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+    </div>
+    @*Дата счета end*@
+    @*Сумма счета start*@
+    <div class="item item8">
+        @Html.LabelFor(model => model.InvoiceSumma, "Сумма счета", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item9">
+        @Html.EditorFor(model => model.InvoiceSumma, new { htmlAttributes = new { @class = "" } })
+        @Html.ValidationMessageFor(model => model.InvoiceSumma, "", new { @class = "text-danger" })
+    </div>
+    @*Сумма счета end*@
+    @*Платежи start*@
+    <div class="ppItem ppItem1">
+        <label class="" for="Summa">Платежи</label>
+    </div>
+    @*Платежи end*@
+    @*Добавить платеж start*@
+    <div id="PaymentsContainer" class="item item10">
+        <div id="MainLoader" style="width: 100%; height: 100%" hidden>
+            <img style="display:block; margin: auto; width: 80px; height: 80px;" src="~/pictures/Coolors-1s-200px.gif" />
+        </div>
+        @if (Model.Payments.Count > 0)
+        {
+            foreach (var p in Model.Payments)
+            {
+                Payment payment = new Payment();
+                payment.PartialPaymentApproved = p.PartialPaymentApproved;
+                payment.PartialPaymentChecked = p.PartialPaymentChecked;
+                payment.PaymentPaymentDone = p.PaymentPaymentDone;
+                payment.Summa = p.Summa;
+                payment.MySQLBankId = p.MySQLBankId;
+                payment.MySQLBankName = p.MySQLBankName;
+                payment.OrestPaymentId = p.OrestPaymentId;
+                @Html.Partial("_PartialPartOfPayment", payment)
+            }
+        }
+        else
+        {
+            @Html.Partial("_PartialPartOfPayment", new Payment())
+        }
+
+        <div class="ppItem ppItem2">
+            <input class="ppItem ppItem3 text-box single-line" id="paymentsSum" name="paymentsSum" />
+        </div>
+        <div class="ppItem ppItem4">
+            <input class="" disabled="" name="summPercentages" id="summPercentages">
+        </div>
+        <div class="ppItem ppItem6">
+        </div>
+        <div class="ppItem ppItem8">
+        </div>
+        <div class="ppItem ppItem10">
+        </div>
+        <div class="ppItem"></div>
+        <div></div>
+    </div>
+    @*<div class="item item11" id="placeForAppendSummPercentages">
+        </div>*@
+
+    <div id="AddPay" class="">
+        <input value="Добавить платеж" type="button" onclick="AddPay()" />
+    </div>
+    @*Добавить платеж end*@
+
+    @*Валюта start*@
+    <div class="item item12">
+        @Html.LabelFor(model => model.Currency.Id, "Валюта", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item13">
+        @Html.DropDownListFor(model => model.CurrencyId, Model.GetCurrencies as SelectList, new { @class = "" })
+        @Html.ValidationMessageFor(model => model.Currency.Id, "", new { @class = "text-danger" })
+    </div>
+    @*Валюта end*@
+    @*Коммент start*@
+    <div class="item item14">
+        @Html.LabelFor(model => model.Comment, "Коммент.", htmlAttributes: new { @class = "" })
+    </div>
+    <div class="item item15">
+        @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "" } })
+        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+    </div>
+    <div></div>
+    @*Коммент end*@
+    <div class="filesLabel">
+        <h4>
+            Файлы:
+        </h4>
+    </div>
+
+    <div class="item files">
+        @{int fileIndex = 0; }
+        @foreach (var pd in Model.PaymentsDocuments)
+        {
+            fileIndex++;
+            <div class="filesList">
+                <div class="fileUrl">
+                    @fileIndex) @pd.DocumentUrl.Remove(0, 43)
+                </div>
+                <div onclick="RemoveFile(event)" class="removeFile" name="RemoveFile">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                        <path d="M1 1 C 17 17, 17 17, 17 17" stroke-width="2" stroke-linecap="round" stroke="red" fill="transparent" line-height="10px" />
+                        <path d="M17 1 C 1 17, 1 17, 1 17" stroke-width="2" stroke-linecap="round" stroke="red" fill="transparent" />
+                    </svg>
+                    <span>Удалить файл</span>
+                    <input name="UploadDocumentId" id="UploadDocumentId" value="@pd.Id" hidden>
+                </div>
+            </div>
+
+        }
+    </div>
+    @*Просмотр файлов start*@
+    <div id="openFiles">
+        <a class="fileViewButoon" onclick="window.open('@Url.Action("FileViewer", new { id=Model.Id } )')">
+            Просмотр файлов
+        </a>
+    </div>
+
+    @*Просмотр файлов end*@
+    @*Выбрать файл start*@
+
+    <div class="item item16 selectFile">
+        <div class="uploadFile" name="uploadFile">
+            <input onchange="SetFileName(this)" type="file" name="UploadDocumentUrl" id="UploadDocumentUrl" class="btn btn-default inputfile" />
+            <label id="uploadDocumentLabelId" name="uploadDocumentLabel" for="UploadDocumentUrl">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                    <path d="M10 0l-5.2 4.9h3.3v5.1h3.8v-5.1h3.3l-5.2-4.9zm9.3 11.5l-3.2-2.1h-2l3.4 2.6h-3.5c-.1 0-.2.1-.2.1l-.8 2.3h-6l-.8-2.2c-.1-.1-.1-.2-.2-.2h-3.6l3.4-2.6h-2l-3.2 2.1c-.4.3-.7 1-.6 1.5l.6 3.1c.1.5.7.9 1.2.9h16.3c.6 0 1.1-.4 1.3-.9l.6-3.1c.1-.5-.2-1.2-.7-1.5z"></path>
+                </svg>
+                <span>Добавить файл</span>
+            </label>
+        </div>
+        <div class="fileName">
+            <input id="fileName" name="fileName" disabled type="text" />
+        </div>
+        @*<div onclick="RemoveFile(event)" class="removeFile" name="RemoveFile" style="visibility:hidden;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="17" viewBox="0 0 20 17">
+                    <path d="M1 1 C 17 17, 17 17, 17 17" stroke-width="2" stroke-linecap="round" stroke="red" fill="transparent" line-height="10px" />
+                    <path d="M17 1 C 1 17, 1 17, 1 17" stroke-width="2" stroke-linecap="round" stroke="red" fill="transparent" />
+                </svg>
+                <span>Удалить файл</span>
+            </div>*@
+        @*@Html.ValidationMessageFor(model => model.DocumentUrl, "", new { @class = "text-danger" })*@
+    </div>
+    @*Выбрать файл end*@
+
+    @*Сохранить start*@
+    <br />
+    <br />
+    <div class="item item17 saveButton">
+        <input id="SaveButton" type="submit" value="Сохранить" class="btn btn-default" />
+    </div>
+    @*Сохранить end*@
+</form>
+<br />
+<br />
+<div>
+    @Html.ActionLink("Назад", "Index")
+</div>
+<br />
+<br />
+<div class="editCreateUserInfo">
+    <div>
+        @if (Model.WhenCreated != null)
+        {
+            <h5>Документ создан: @Model.whoAddThis.Email</h5>
+        }
+    </div>
+    <div>
+        @if (Model.WhenCreated != null)
+        {
+            <h5>Дата создания: @Model.WhenCreated.Value</h5>
+        }
+    </div>
+    <div>
+        @if (Model.whoMadeLastChanges != null)
+        {
+            <h5>Последняя редакция польз.: @Model.whoMadeLastChanges.Email</h5>
+        }
+    </div>
+    <div>
+        @if (Model.WhenEdited != null)
+        {
+            <h5>Дата: @Model.WhenEdited.Value</h5>
+        }
+
+    </div>
+</div>
+
+<script>
+
+    var getFile = new selectFile;
+    getFile.targets('DocumentUrl', 'selected');
+
+    var userIsInRoleSign1 = '@(User.IsInRole("Sign1") || User.IsInRole("Developer") ? "true" : "false")';
+    var userIsInRoleSign1OrAccountant = '@(User.IsInRole("Sign1") || User.IsInRole("Developer") || User.IsInRole("Accountant") ? "true" : "false")';
+
+    $("#InvoiceSumma").on("change paste", sumaRoundUp);
+
+    $("#InvoiceSumma").on("change keydown paste input", SumChange);
+
+    //calculateSumPartialPaymentsPercentage();
+
+    SumChange();
+
+    $("#SaveButton").click(function (e) {
+        //alert("PartialPaymentsSumm");
+        PartialPaymentsSumm(e);
+    });
+
+</script>
+

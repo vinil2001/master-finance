@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <link href="~/CSS/MenuBar.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="menueBar">
+        <div id="main" class="main menueHeader">
+            <a href="~/Home/Index">Главная</a>
+        </div>
+        <div class="dropDown menueHeader">
+            <a href="#">Справочники</a>
+            <div class="dropDownContent">
+                <div class="sub-dropdown-content">
+                    <a href="~/Counterparties/Index"> Контагенты</a>
+                    <div class="sub-list">
+                        <a href="~/RemovedCounterparties/Index">Удаленные в архив</a>
+                    </div>
+                </div>
+                
+                <a href="~/banks/Index">Банки</a>
+                <a href="#">Формы собственности</a>
+                <a href="#">Формы оплаты</a>
+                <a href="~/IncomingCategories/Index">Категории</a>
+                <a href="#">Статьи/Типы</a>
+            </div>
+        </div>
+        <div class="payments menueHeader">
+            <a href="/PaymentStatements/Index/1">Платежная ведомость</a>
+        </div>
+        <div id="exit" class="exit menueHeader">
+            <a href="/Account/LogOff">Выход</a>
+        </div>
+    </div>
+
+</body>
+</html>
